@@ -8,6 +8,10 @@
 import Foundation
 
 public extension String {
+    var dataEncoded: Data {
+        return data(using: .utf8)!
+    }
+    
     /// 轉成多語系化文字
     ///  - comment: 可填入翻譯文案的註解，預設填空字串即可
     func localizedString(comment: String = "") -> String {

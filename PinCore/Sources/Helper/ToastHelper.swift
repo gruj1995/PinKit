@@ -1,6 +1,6 @@
 //
 //  ToastHelper.swift
-//  
+//
 //
 //  Created by 李品毅 on 2023/7/14.
 //
@@ -8,7 +8,7 @@
 import UIKit
 
 public class ToastHelper {
-    // MARK: Internal
+    // MARK: Public
 
     public enum ToastPosition {
         case bottom
@@ -22,15 +22,23 @@ public class ToastHelper {
 
     // MARK: - Instance Methods
 
-    public func showToast(text: String, position: ToastPosition, alignment: NSTextAlignment, font: UIFont = .systemFont(ofSize: 15), backgroundColor: UIColor = .darkGray, textColor: UIColor = .white, cornerRadius: CGFloat = 10.0, withDuration duration: TimeInterval = 1, delay: TimeInterval = 1.5) {
+    public func showToast(text: String,
+                          position: ToastPosition,
+                          alignment: NSTextAlignment,
+                          font: UIFont = .systemFont(ofSize: 15),
+                          backgroundColor: UIColor = .darkGray,
+                          textColor: UIColor = .white,
+                          cornerRadius: CGFloat = 10.0,
+                          withDuration duration: TimeInterval = 1,
+                          delay: TimeInterval = 1.5) {
         // 用來呈現 toast 的畫面
         guard let toastWindow = UIApplication.shared.keyWindowCompact else {
             return
         }
 
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.hideToast(window: toastWindow)
+            guard let self else { return }
+            hideToast(window: toastWindow)
 
             let toastLb = self.createToastLabel(text: text, font: font, backgroundColor: backgroundColor, textColor: textColor, cornerRadius: cornerRadius, alignment: alignment)
 

@@ -8,6 +8,10 @@
 import Foundation
 
 public extension Date {
+    static var currentTimestamp: Int {
+        Int(Date().timeIntervalSince1970)
+    }
+
     var wholeDayAfter: Date {
         Calendar.current.date(byAdding: .day, value: 1, to: self) ?? self
     }

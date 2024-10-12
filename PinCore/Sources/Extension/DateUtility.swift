@@ -17,9 +17,7 @@ public struct DateUtility {
     /// 參考：https://blog.csdn.net/weixin_33717298/article/details/88703905
     public static let iso8601DateFormatter = ISO8601DateFormatter()
 
-    public var timeZone: TimeZone {
-        TimeZone.current
-    }
+    public var timeZone: TimeZone { .current }
 
     /// 遇到日期計算一律使用 ISO8601 格式,不要用 Calendar.current
     public var calendar: Calendar {

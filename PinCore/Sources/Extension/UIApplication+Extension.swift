@@ -1,6 +1,6 @@
 //
-//  UIApplicationExtension.swift
-//  
+//  UIApplication+Extension.swift
+//
 //
 //  Created by 李品毅 on 2023/7/14.
 //
