@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Logger {
+public class PinLogger {
 
     /// 輸出訊息
     public static func log<T>(_ message: T) {

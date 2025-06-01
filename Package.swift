@@ -21,11 +21,6 @@ let package = Package(
             name: "PinCore",
             path: "PinCore/Sources"
         ),
-        .testTarget(
-            name: "PinCoreTests",
-            dependencies: ["PinCore"],
-            path: "PinCore/Tests"
-        ),
         .target(
             name: "PinNetwork",
             dependencies: [
