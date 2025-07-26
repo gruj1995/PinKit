@@ -5,21 +5,24 @@
 //  Created by 李品毅 on 2023/7/14.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 // 參考文章： https://www.avanderlee.com/swift/property-wrappers/
 
-@available(iOS 13.0, *)
 @propertyWrapper
 public struct UserDefaultValue<Value: Codable> {
-    // 外部可以替換預設的 UserDefaults 容器，比如透過 UserDefaults(suiteName: "group.com.squareMusic.app") 生成
-    public let container: UserDefaults = .standard
+    // MARK: Lifecycle
 
-    public init(key: String, defaultValue: Value) {
+    public init(key: String, defaultValue: Value, container: UserDefaults = .standard) {
         self.key = key
         self.defaultValue = defaultValue
+        self.container = container
     }
+
+    // MARK: Public
+
+    public let key: String
 
     public var wrappedValue: Value {
         get {
@@ -36,10 +39,15 @@ public struct UserDefaultValue<Value: Codable> {
         return publisher.eraseToAnyPublisher()
     }
 
-    // MARK: private
+    // MARK: Internal
 
-    private let key: String
-    private let defaultValue: Value
+    let defaultValue: Value
+
+    // 外部可以替換預設的 UserDefaults 容器，比如透過 UserDefaults(suiteName: "group.com.squareMusic.app") 生成
+    let container: UserDefaults
+
+    // MARK: Private
+
     private let publisher = PassthroughSubject<Value, Never>()
 
     private func get<T: Decodable>(forKey key: String, as type: T.Type) -> T? {
@@ -47,8 +55,8 @@ public struct UserDefaultValue<Value: Codable> {
         return try? JSONDecoder().decode(type, from: data)
     }
 
-    private func set<T: Encodable>(_ value: T?, forKey key: String) {
-        if let value = value {
+    private func set(_ value: (some Encodable)?, forKey key: String) {
+        if let value {
             if let data = try? JSONEncoder().encode(value) {
                 container.set(data, forKey: key)
             } else {

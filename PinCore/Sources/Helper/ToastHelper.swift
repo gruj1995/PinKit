@@ -16,11 +16,7 @@ public class ToastHelper {
         case top
     }
 
-    // MARK: - Init
-
     public static let shared = ToastHelper()
-
-    // MARK: - Instance Methods
 
     public func showToast(text: String,
                           position: ToastPosition,
@@ -31,28 +27,26 @@ public class ToastHelper {
                           cornerRadius: CGFloat = 10.0,
                           withDuration duration: TimeInterval = 1,
                           delay: TimeInterval = 1.5) {
-        // 用來呈現 toast 的畫面
-        guard let toastWindow = UIApplication.shared.keyWindowCompact else {
-            return
-        }
-
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            // 用來呈現 toast 的畫面
+            guard let toastWindow = UIApplication.shared.keyWindowCompact else { return }
+
             hideToast(window: toastWindow)
 
-            let toastLb = self.createToastLabel(text: text, font: font, backgroundColor: backgroundColor, textColor: textColor, cornerRadius: cornerRadius, alignment: alignment)
+            let toastLabel = createToastLabel(text: text, font: font, backgroundColor: backgroundColor, textColor: textColor, cornerRadius: cornerRadius, alignment: alignment)
 
-            self.calculateLabelPosition(toastLb: toastLb, position: position)
-            toastWindow.addSubview(toastLb)
+            calculateLabelPosition(label: toastLabel, position: position)
+            toastWindow.addSubview(toastLabel)
 
             // 建立一個 UIViewPropertyAnimator 物件，並設定相關屬性
             let animator = UIViewPropertyAnimator(duration: duration, curve: .easeOut) {
-                toastLb.alpha = 0.0
+                toastLabel.alpha = 0.0
             }
 
             // 設定動畫完成後的動作
             animator.addCompletion { _ in
-                toastLb.removeFromSuperview()
+                toastLabel.removeFromSuperview()
             }
 
             // 執行動畫
@@ -84,13 +78,13 @@ public class ToastHelper {
         return label
     }
 
-    private func calculateLabelPosition(toastLb: UILabel, position: ToastPosition) {
+    private func calculateLabelPosition(label: UILabel, position: ToastPosition) {
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         let maxSize = CGSize(width: screenWidth - 40, height: screenHeight)
         let padding: CGFloat = 20
 
-        var expectedSize = toastLb.sizeThatFits(maxSize)
+        var expectedSize = label.sizeThatFits(maxSize)
         var lbWidth = maxSize.width
         var lbHeight = maxSize.height
 
@@ -102,16 +96,15 @@ public class ToastHelper {
         }
         expectedSize = CGSize(width: lbWidth, height: lbHeight)
 
-        var minY: CGFloat!
-        switch position {
+        let minY: CGFloat = switch position {
         case .bottom:
-            minY = screenHeight - expectedSize.height - 60 - padding
+            screenHeight - expectedSize.height - 60 - padding
         case .center:
-            minY = (screenHeight - expectedSize.height - padding) / 2
+            (screenHeight - expectedSize.height - padding) / 2
         case .top:
-            minY = expectedSize.height + 60 + padding
+            expectedSize.height + 60 + padding
         }
 
-        toastLb.frame = CGRect(x: (screenWidth / 2) - ((expectedSize.width + padding) / 2), y: minY, width: expectedSize.width + padding, height: expectedSize.height + padding)
+        label.frame = CGRect(x: (screenWidth / 2) - ((expectedSize.width + padding) / 2), y: minY, width: expectedSize.width + padding, height: expectedSize.height + padding)
     }
 }

@@ -22,5 +22,16 @@ public extension String {
     func replace(target: String, withString: String) -> String {
         return self.replacingOccurrences(of: target, with: withString, options: NSString.CompareOptions.literal, range: nil)
     }
+}
 
+public extension String {
+    var isVideoFile: Bool {
+        let videoExtensions = ["mp4", "mov", "avi", "mkv", "flv", "wmv", "m4v"]
+        return videoExtensions.contains(where: { hasSuffix(".\($0)") })
+    }
+
+    var isPictureFile: Bool {
+        let imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "tiff", "heic", "webp"]
+        return imageExtensions.contains(where: { hasSuffix(".\($0)") })
+    }
 }
