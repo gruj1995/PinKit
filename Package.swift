@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,9 +6,9 @@ import PackageDescription
 let package = Package(
     name: "PinKit",
     platforms: [
-        .iOS(.v16),
-        .watchOS(.v8),
-        .macOS(.v10_15)
+        .iOS(.v17),
+        .watchOS(.v10),
+        .macOS(.v14)
     ],
     products: [
         .library(name: "PinCore", targets: ["PinCore"]),
@@ -20,7 +20,8 @@ let package = Package(
         .package(url: "https://github.com/Moya/Moya", exact: "15.0.3"),
         .package(url: "https://github.com/hmlongco/Factory", exact: "2.5.3"),
         .package(url: "https://github.com/liamnichols/xcstrings-tool-plugin.git", exact: "1.2.0"),
-        .package(url: "https://github.com/A-pen-app/AssetsConstantPlugin", exact: "1.0.0")
+        .package(url: "https://github.com/A-pen-app/AssetsConstantPlugin", exact: "1.0.0"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS", exact: "7.1.0")
     ],
     targets: [
         .target(
@@ -38,7 +39,8 @@ let package = Package(
             dependencies: [
                 "PinCore",
                 "PinNetwork",
-                .product(name: "Factory", package: "Factory")
+                .product(name: "Factory", package: "Factory"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS")
             ],
             path: "PinModule/Sources",
             resources: [
