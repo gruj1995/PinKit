@@ -2,6 +2,21 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## iOS Development Guidelines
+
+**Target**: Follow iOS 17 strictly. Use only SwiftUI and system APIs available in iOS 17 — no higher, no lower.
+
+**Architecture**: Follow Clean Architecture with Data/Domain/Presentation layers as defined in `Docs/API_ARCHITECTURE_GUIDE.md`
+
+**Models**: All domain models must implement `Codable`, `Identifiable`, and `Hashable`
+
+## SwiftUI Architecture
+
+- **State Management**: Use `@Observable` classes instead of ViewModels. Use `@State`/`@Binding` for view state, `@Environment` for dependencies
+- **Views**: Split into small, focused components with clear state responsibilities  
+- **Dependencies**: Inject via SwiftUI Environment (Repository, APIClient, etc.)
+- **Testing**: Test business logic in service/network layers, not in Views
+
 ## Project Overview
 
 PinKit is a Swift Package Manager library organized into three main modules:
@@ -38,45 +53,44 @@ Open Package.swift in Xcode or add as dependency to an iOS/macOS project.
 - **PinModule**: Application-level components and dependency injection
   - Depends on PinCore and PinNetwork
   - Uses Factory for dependency injection
-  - Contains LazyPager for paginated views
 
 - **PinNetwork**: Network abstraction layer
   - Built on Moya framework
   - Custom JSONDecoder with mixed ISO8601 date parsing
   - Extensions for async/await support
 
-### API Architecture Pattern
-Follow the comprehensive API architecture guide in `PinModule/API_ARCHITECTURE_GUIDE.md`:
-
-1. **Domain Layer**: Models with Codable, Identifiable, Hashable protocols
-2. **Data Layer**: 
-   - API definitions using Moya TargetType
-   - RemoteDataSource with async/await
-   - Repository pattern with protocol abstraction
-3. **Dependency Injection**: Use Factory Container for DI registration
-
 ### Key Dependencies
 - **Kingfisher**: Image loading and caching
 - **Moya**: Network abstraction layer
 - **Factory**: Dependency injection container
 
-### Platform Support
-- iOS 16.0+
-- watchOS 8.0+
-- macOS 10.15+
-
-## Code Conventions
-
-- Follow existing Swift naming conventions
-- Use `public` access for module APIs
-- Implement proper protocols (Codable, Identifiable, Hashable) for data models
-- Use async/await for network operations
-- Register dependencies in Factory Container extensions
-- Follow the API architecture pattern for new network modules
-
 ## Important Notes
 
 - Network layer uses custom date decoding for mixed ISO8601 formats
-- All SwiftUI components are designed for iOS 16+ with modern APIs
 - Extensions are organized by framework (Foundation, UIKit, SwiftUI)
 - Use existing logging infrastructure (PinLogger) for debugging
+- **Colors**: Define in `Assets.xcassets` with light/dark variants, access via `Color(appColor: .colorName)`
+- **Images**: Use `KingfisherImageView` for remote URLs, SF Symbols for icons, `Image(appImage: .imageName)` for assets
+- **Fonts**: Always use `.systemFont(size: _, weight: _)`
+- **DI**: For singleton services, use Factory pattern with Container for injection. Prefer direct injection for other dependencies.
+
+## Project Structure
+
+e.g.
+```
+PinModule/               # module
+├── Calendar/              # Calendar feature module
+│   ├── Data/
+│   │   ├── DataSource/Remote/  # API definitions (using Moya)
+│   │   └── Repository/         # Repository protocols and implementations
+│   ├── Domain/                 # Data models (Codable, Identifiable, Hashable)
+│   └── Presentation/View/      # SwiftUI views
+├── Settings/              # Settings feature module
+│   ├── Data/
+│   ├── Domain/
+│   └── Presentation/View/
+├── Shared/                # Shared components
+│   ├── Views/             # Reusable UI components
+│   └── Extensions/        # Swift extensions
+└── Resources/             # Assets (colors, images, etc.)
+```

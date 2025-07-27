@@ -9,7 +9,7 @@ import PinCore
 import PinNetwork
 
 public typealias FetchState = PinCore.FetchState
-public typealias PPLogger = PinCore.PinLogger
+public typealias PinLogger = PinCore.PinLogger
 public typealias KingfisherImageView = PinCore.KingfisherImageView
 public typealias GIFImageView = PinCore.GIFImageView
 public typealias MimeType = PinNetwork.MimeType

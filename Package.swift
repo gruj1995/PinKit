@@ -20,7 +20,8 @@ let package = Package(
         .package(url: "https://github.com/Moya/Moya", exact: "15.0.3"),
         .package(url: "https://github.com/hmlongco/Factory", exact: "2.5.3"),
         .package(url: "https://github.com/liamnichols/xcstrings-tool-plugin.git", exact: "1.2.0"),
-        .package(url: "https://github.com/A-pen-app/AssetsConstantPlugin", exact: "1.0.0")
+        .package(url: "https://github.com/A-pen-app/AssetsConstantPlugin", exact: "1.0.0"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS", exact: "7.1.0")
     ],
     targets: [
         .target(
@@ -38,7 +39,8 @@ let package = Package(
             dependencies: [
                 "PinCore",
                 "PinNetwork",
-                .product(name: "Factory", package: "Factory")
+                .product(name: "Factory", package: "Factory"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS")
             ],
             path: "PinModule/Sources",
             resources: [
