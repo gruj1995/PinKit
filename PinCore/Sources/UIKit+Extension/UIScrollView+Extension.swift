@@ -147,11 +147,6 @@ public extension UITableView {
 
 public extension NSCollectionLayoutGroup {
     static func setHorizontalRepeatingGroup(groupSize: NSCollectionLayoutSize, repeatingSubitem item: NSCollectionLayoutItem, count: Int) -> NSCollectionLayoutGroup {
-        let group: NSCollectionLayoutGroup = if #available(iOS 16.0, *) {
-            NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: count)
-        } else {
-            NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: count)
-        }
-        return group
+        return NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: count)
     }
 }

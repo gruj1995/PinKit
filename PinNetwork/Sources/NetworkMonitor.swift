@@ -10,7 +10,6 @@ import Network
 
 // https://www.appcoda.com.tw/network-framework/
 // 網路連線狀態
-@available(iOS 13.0, *)
 public final class NetworkMonitor {
     // MARK: Lifecycle
 

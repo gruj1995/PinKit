@@ -5,7 +5,7 @@
 //  Created by pinyi Li on 2024/7/15.
 //
 
-import UIKit
+import Foundation
 
 public extension Collection {
     /// Accesses the element at the specified index if it is within bounds, otherwise returns nil.

@@ -20,7 +20,6 @@ public struct ShakeEffect: GeometryEffect {
     }
 }
 
-@available(iOS 17.0, *)
 public struct ShakeModifier: ViewModifier {
     // MARK: Internal
 
@@ -29,7 +28,6 @@ public struct ShakeModifier: ViewModifier {
     public let duration: Double
     public let repeatCount: Int
 
-    @available(iOS 17.0, *)
     public func body(content: Content) -> some View {
         content
             .modifier(ShakeEffect(amount: 30 * force, shakesPerUnit: 3, animatableData: CGFloat(shakeTimes)))
@@ -47,7 +45,6 @@ public struct ShakeModifier: ViewModifier {
     @State private var shakeTimes: Int = 0
 }
 
-@available(iOS 17.0, *)
 public extension View {
     func shake(trigger: Bool,
                force: CGFloat = 0.2,
