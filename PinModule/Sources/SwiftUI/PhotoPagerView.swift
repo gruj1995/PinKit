@@ -47,18 +47,38 @@ public struct PhotoPagerView: View {
             .simultaneousGesture(
                 DragGesture()
                     .onChanged { value in
-                        dragOffset = value.translation
-                        let progress = abs(value.translation.height) / dismissThreshold
-                        backgroundOpacity = 1.0 - min(progress, 1.0)
-                        // Scale from 1.0 down to 0.5 based on drag progress
-                        currentScale = 1.0 - (min(progress, 1.0) * 0.5)
+                        // Only handle vertical drag gestures to avoid conflict with horizontal paging
+                        let horizontalDrag = abs(value.translation.width)
+                        let verticalDrag = abs(value.translation.height)
+
+                        // Only update scale and background if this is primarily a vertical gesture
+                        if verticalDrag > horizontalDrag {
+                            dragOffset = value.translation
+                            let progress = verticalDrag / dismissThreshold
+                            backgroundOpacity = 1.0 - min(progress, 1.0)
+                            // Scale from 1.0 down to 0.5 based on drag progress
+                            currentScale = 1.0 - (min(progress, 1.0) * 0.5)
+                        }
                     }
                     .onEnded { value in
-                        let velocity = value.predictedEndTranslation.height - value.translation.height
-                        if abs(dragOffset.height) > dismissThreshold || abs(velocity) > velocityThreshold {
-                            dismiss()
+                        let horizontalDrag = abs(value.translation.width)
+                        let verticalDrag = abs(value.translation.height)
+
+                        // Only handle dismiss logic for vertical gestures
+                        if verticalDrag > horizontalDrag {
+                            let velocity = value.predictedEndTranslation.height - value.translation.height
+                            if verticalDrag > dismissThreshold || abs(velocity) > velocityThreshold {
+                                dismiss()
+                            } else {
+                                withAnimation(.spring()) {
+                                    dragOffset = .zero
+                                    backgroundOpacity = 1.0
+                                    currentScale = 1.0
+                                }
+                            }
                         } else {
-                            withAnimation(.spring()) {
+                            // Reset any scaling that might have occurred during horizontal swipe
+                            withAnimation(.spring(duration: 0.2)) {
                                 dragOffset = .zero
                                 backgroundOpacity = 1.0
                                 currentScale = 1.0
@@ -79,7 +99,7 @@ public struct PhotoPagerView: View {
     @State private var dragOffset: CGSize = .zero
     @State private var backgroundOpacity: Double = 1.0
     @State private var currentScale: CGFloat = 1.0
-    
+
     private let dismissThreshold: CGFloat = 100
     private let velocityThreshold: CGFloat = 300
     private let sources: [PhotoSource]
@@ -89,7 +109,7 @@ public struct PhotoPagerView: View {
             dismiss()
         } label: {
             Image(systemName: "xmark")
-                .font(.system(size: 28))
+                .font(.system(size: 20))
                 .foregroundColor(.white)
                 .padding()
         }
